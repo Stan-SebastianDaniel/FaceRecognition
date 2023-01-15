@@ -1,10 +1,13 @@
 package com.example.facerecognition;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
@@ -70,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     };
     private Mat matRGB;
     private Mat matGrey;
+    private int cameraId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,5 +117,25 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                     new Scalar(255, 0, 0));
         }
         return matRGB;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.swap)
+            swapCamera();
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void swapCamera() {
+        cameraId = cameraId^1;
+        javaCameraView.disableView();
+        javaCameraView.setCameraIndex(cameraId);
+        javaCameraView.enableView();
     }
 }
